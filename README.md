@@ -14,3 +14,7 @@ It is built with GLVis for visualisation.
 1. The formatting library [fmt](https://fmt.dev/6.0.0).
 
 1. Unit testing with [GoogleTest](https://github.com/google/googletest) framework.
+
+
+## Mesh generation
+A few sample meshes are given in the folder "meshes". The meshes are generated using the script "run_bisection_mesh_generator_2d" from the repository [PolytopeMeshGen](https://github.com/pratyuksh/PolytopeMeshGen). The meshes generated as such are in the hdf5 format, they are converted to "MFEM mesh v1.0" format (which is readable by the code in the current repo) using the script "run_converter_hdf5_to_mfem_2d.py" and the files in geometry_files folder in the repo [PolytopeMeshGen](https://github.com/pratyuksh/PolytopeMeshGen).
