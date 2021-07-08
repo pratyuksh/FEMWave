@@ -1,0 +1,41 @@
+# Visualization window geometry
+window 0 0 1600 1200
+
+# Initial solution
+solution ../../output/transmission_test1/lx4/mesh_lx4 ../../output/transmission_test1/lx4/pressure_lx4_t0.100000
+
+# Setup the GLVis scene. Executed after pressing the space bar.
+{
+   perspective off
+   view 0 0
+   viewcenter 0 0
+   zoom 1.4
+   light off
+   scale 1.3
+   #keys mmmc
+   keys mmm
+}
+
+# Take multiple screenshots. Executed after pressing the space bar.
+{   
+   solution ../../output/transmission_test1/lx4/mesh_lx4 ../../output/transmission_test1/lx4/pressure_lx4_t0.100000
+   scale 1.3
+   valuerange -2.4 2.4
+   screenshot ../../figures/transmission_test1/pressure_lx4_t1E-1.png
+   
+   solution ../../output/transmission_test1/lx4/mesh_lx4 ../../output/transmission_test1/lx4/pressure_lx4_t0.200000
+   scale 1.3
+   valuerange -1.4 1.4
+   screenshot ../../figures/transmission_test1/pressure_lx4_t2E-1.png
+   
+   solution ../../output/transmission_test1/lx4/mesh_lx4 ../../output/transmission_test1/lx4/pressure_lx4_t0.300000
+   scale 1.3
+   valuerange -1.6 1.6
+   screenshot ../../figures/transmission_test1/pressure_lx4_t3E-1.png
+   
+   solution ../../output/transmission_test1/lx4/mesh_lx4 ../../output/transmission_test1/lx4/pressure_lx4_t0.400000
+   scale 1.3
+   valuerange -1.3 1.3
+   screenshot ../../figures/transmission_test1/pressure_lx4_t4E-1.png
+}
+

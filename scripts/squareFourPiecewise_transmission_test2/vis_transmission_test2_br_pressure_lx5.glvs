@@ -1,0 +1,41 @@
+# Visualization window geometry
+window 0 0 1600 1200
+
+# Initial solution
+solution ../../output/squareFourPiecewise_transmission_test2/br/lx5/mesh_lx5 ../../output/squareFourPiecewise_transmission_test2/br/lx5/pressure_lx5_t0.100000
+
+# Setup the GLVis scene. Executed after pressing the space bar.
+{
+   perspective off
+   view 0 0
+   viewcenter 0 0
+   zoom 1.4
+   light off
+   scale 1.3
+   #keys mmmc
+   keys mmm
+}
+
+# Take multiple screenshots. Executed after pressing the space bar.
+{  
+   solution ../../output/squareFourPiecewise_transmission_test2/br/lx5/mesh_lx5 ../../output/squareFourPiecewise_transmission_test2/br/lx5/pressure_lx5_t0.000000
+   scale 1.3
+   valuerange -8 8
+   screenshot ../../figures/squareFourPiecewise_transmission_test2/br/pressure_lx5_t0.png
+ 
+   solution ../../output/squareFourPiecewise_transmission_test2/br/lx5/mesh_lx5 ../../output/squareFourPiecewise_transmission_test2/br/lx5/pressure_lx5_t0.100000
+   scale 1.3
+   valuerange -15 15
+   screenshot ../../figures/squareFourPiecewise_transmission_test2/br/pressure_lx5_t1E-1.png
+   
+   solution ../../output/squareFourPiecewise_transmission_test2/br/lx5/mesh_lx5 ../../output/squareFourPiecewise_transmission_test2/br/lx5/pressure_lx5_t0.200000
+   scale 1.3
+   valuerange -17 17
+   screenshot ../../figures/squareFourPiecewise_transmission_test2/br/pressure_lx5_t2E-1.png
+   
+   solution ../../output/squareFourPiecewise_transmission_test2/br/lx5/mesh_lx5 ../../output/squareFourPiecewise_transmission_test2/br/lx5/pressure_lx5_t0.300000
+   scale 1.3
+   valuerange -12 12
+   screenshot ../../figures/squareFourPiecewise_transmission_test2/br/pressure_lx5_t3E-1.png
+}
+

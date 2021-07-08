@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import json
+import numpy as np
+from decimal import Decimal
+
+
+def load_json(filename):
+    with open(filename, "r") as f:
+        return json.load(f)
+
+def load_data(filename):
+    j = load_json(filename)
+    return np.array(j["h_max"]), np.array(j["ndofs"], dtype=np.int32), np.array(j["pressure"]), np.array(j["velocity"])
+
+
+def convgRateWrtH (data_x, data_y):
+    N = data_x.size
+    #z = np.polyfit(np.log2(data_x), np.log2(data_y), 1)
+    #z = np.polyfit(np.log2(data_x[1:N]), np.log2(data_y[1:N]), 1)
+    z = np.polyfit(np.log2(data_x[N-3:N]), np.log2(data_y[N-3:N]), 1)
+    return round(z[0],2)
+
+# Relative L2-error, quasi-uniform
+def evalRateErrRelL2FGQu(dir_sol, ptype, stab, deg):
+    
+    if ptype == 1:
+        fn = dir_sol+'qu/convergenceFG_lShaped_test1_relL2_degt'+str(deg)+'_deg1x'+str(deg)+'_deg2x'+str(deg)+'_stab'+str(stab)+'.json'    
+    elif ptype == 2:
+        fn = dir_sol+'qu/convergenceFG_lShaped_test1_relL2_degt'+str(deg)+'_deg1x'+str(deg)+'_deg2x'+str(deg-1)+'_stab'+str(stab)+'.json'
+    hMax, ndofs, errp, errv = load_data(fn)
+    
+    print("\n\n")
+    for k in range(errp.shape[0]-1,errp.shape[0]):
+        print(k, "%.4E"%Decimal(errp[k]), "%.4E"%Decimal(errv[k]))
+    print("\n")
+    for k in range(errp.size-3,errp.size-1):
+        val1 = np.log2(errp[k]) - np.log2(errp[k+1])
+        val2 = np.log2(errv[k]) - np.log2(errv[k+1])
+        print(k, "%4.2f"%val1, "%4.2f"%val2)
+    
+    ratep = convgRateWrtH (hMax, errp[:])
+    ratev = convgRateWrtH (hMax, errv[:])
+    print('\nConvergence rate of pressure: ', ratep)
+    print('Convergence rate of velocity: ', ratev)
+
+# Relative L2-error, bisection-refined
+def evalRateErrRelL2FGBr(dir_sol, ptype, stab, deg):
+    
+    if ptype == 1:
+        fn = dir_sol+'br/convergenceFG_lShaped_test1_relL2_degt'+str(deg)+'_deg1x'+str(deg)+'_deg2x'+str(deg)+'_stab'+str(stab)+'.json'    
+    elif ptype == 2:
+        fn = dir_sol+'br/convergenceFG_lShaped_test1_relL2_degt'+str(deg)+'_deg1x'+str(deg)+'_deg2x'+str(deg-1)+'_stab'+str(stab)+'.json'
+    hMax, ndofs, errp, errv = load_data(fn)
+    
+    print("\n\n")
+    for k in range(errp.shape[0]-1,errp.shape[0]):
+        print(k, "%.4E"%Decimal(errp[k]), "%.4E"%Decimal(errv[k]))
+    print("\n")
+    for k in range(errp.size-3,errp.size-1):
+        val1 = np.log2(errp[k]) - np.log2(errp[k+1])
+        val2 = np.log2(errv[k]) - np.log2(errv[k+1])
+        print(k, "%4.2f"%val1, "%4.2f"%val2)
+    
+    ratep = convgRateWrtH (hMax, errp[:])
+    ratev = convgRateWrtH (hMax, errv[:])
+    print('\nConvergence rate of pressure: ', ratep)
+    print('Convergence rate of velocity: ', ratev)
+
+# Relative DG-error, bisection-refined
+def evalRateErrDgFGBr(dir_sol, ptype, stab, deg):
+    
+    if ptype == 1:
+        fn = dir_sol+'br/convergenceFG_lShaped_test1_DG_degt'+str(deg)+'_deg1x'+str(deg)+'_deg2x'+str(deg)+'_stab'+str(stab)+'.json'    
+    elif ptype == 2:
+        fn = dir_sol+'br/convergenceFG_lShaped_test1_DG_degt'+str(deg)+'_deg1x'+str(deg)+'_deg2x'+str(deg-1)+'_stab'+str(stab)+'.json'
+    hMax, ndofs, err1, err2 = load_data(fn)
+    
+    errDg = np.sqrt(err1**2 + err2**2)
+    
+    print("\n\n")
+    for k in range(errDg.shape[0]-1, errDg.shape[0]):
+        print(k, "%.4E"%Decimal(errDg[k]))
+    print("\n")
+    for k in range(errDg.size-3,errDg.size-1):
+        val = np.log2(errDg[k]) - np.log2(errDg[k+1])
+        print(k, "%4.2f"%val)
+    
+    rate = convgRateWrtH (hMax, errDg[:])
+    print('\nConvergence rate of Dg error: ', rate)
+
+
+if __name__=='__main__':
+    
+    dir_sol = '../../output/lShaped_test1/'
+    
+    print("\n\nFull-grid smooth solution:\n")
+    ptype = 2
+    deg = 3
+    # evalRateErrRelL2FGQu(dir_sol, ptype, 1, deg)
+    for stabParams in range(1,5):
+        # evalRateErrRelL2FGBr(dir_sol, ptype, stabParams, deg)
+        evalRateErrDgFGBr(dir_sol, ptype, stabParams, deg)
+    
+
+# End of file
